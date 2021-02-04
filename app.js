@@ -51,3 +51,14 @@ db.collection('cafes').orderBy('city').onSnapshot(snapshot => {
         }
     });
 });
+
+// update data
+// db.collection('cafes').doc('id').update({
+//     name: 'name',
+//     city: 'city'
+// });
+// update data completely
+// db.collection('cafes').doc('id').set({
+//     name: 'name',
+//     city: 'city'
+// });
