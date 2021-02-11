@@ -1,14 +1,33 @@
 // listen for auth status changes
 auth.onAuthStateChanged(user => {
     if (user) {
-        db.collection('guides').get().then(snapshot => {
+        db.collection('guides').onSnapshot(snapshot => {
             setupGuides(snapshot.docs);
             setupUI(user);
+        }, err => {
+            console.log(err);
         });
     } else {
         setupUI();
         setupGuides([]);
     }
+});
+
+const createForm = document.querySelector('#create-form');
+createForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    db.collection('guides').add({
+        title: createForm['title'].value,
+        content: createForm['content'].value
+    }).then(() => {
+        // close the modal and reset the form
+        const modal = document.querySelector('#modal-create');
+        M.Modal.getInstance(modal).close();
+        createForm.reset();
+    }).catch(err => {
+        console.log(err.message);
+    });
 });
 
 // signup
@@ -22,10 +41,14 @@ signupForm.addEventListener('submit', (e) => {
 
     // signup the user
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
+        return db.collection('users').doc(cred.user.uid).set({
+            bio: signupForm['signup-bio'].value
+        });
+    }).then(() => {
         const modal = document.querySelector('#modal-signup');
         M.Modal.getInstance(modal).close();
         signupForm.reset();
-    });
+    })
 });
 
 // logout
