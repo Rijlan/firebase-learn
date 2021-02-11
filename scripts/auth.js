@@ -85,6 +85,6 @@ loginForm.addEventListener('submit', (e) => {
         // close the login modal and reset form
         const modal = document.querySelector('#modal-login');
         M.Modal.getInstance(modal).close();
-        signupForm.reset();
+        loginForm.reset();
     });
 });
