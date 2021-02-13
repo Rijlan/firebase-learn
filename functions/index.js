@@ -34,8 +34,8 @@ exports.addRequest = functions.https.onCall((data, context) => {
         );
     }
 
-    return admin.firestore().collection('requests').add({
+    return admin.firestore().collection('requests').doc().set({
         text: data.text,
-        upvote: 0
+        upvotes: 0
     });
 });
